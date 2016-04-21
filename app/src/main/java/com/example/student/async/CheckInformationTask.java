@@ -22,7 +22,7 @@ public class CheckInformationTask extends AsyncTask<String,Integer,List<String>>
         List<String> result=new ArrayList<>();
         HttpURLConnection connection=null;
         try {
-            connection=(HttpURLConnection)(new URL(params[0]).openConnection());
+            connection=(HttpURLConnection)(new URL(buildUrl(params[0])).openConnection());
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
             result.add(Integer.toString(connection.getContentLength()));
@@ -46,5 +46,19 @@ public class CheckInformationTask extends AsyncTask<String,Integer,List<String>>
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
+    }
+    private String buildUrl(String url)
+    {
+        StringBuilder sb=new StringBuilder();
+        try {
+            if (!url.substring(0, 4).contains("http"))
+                sb.append("http://");
+            if (!url.substring(4, 11).contains("www"))
+                sb.append("www.");
+        }catch (Exception ignored){}
+        finally {
+            sb.append(url);
+        }
+        return sb.toString();
     }
 }
